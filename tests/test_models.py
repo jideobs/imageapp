@@ -37,7 +37,7 @@ class GetImageTests(TestCase):
 
 class ImageTests(TestCase):
     def test_save__invalid_image(self):
-        test_image = create_test_image(3000, 3000)
+        test_image = create_test_image(4000, 4000)
 
         with self.assertRaises(ImageNotValidException):
             image = Image(test_image.read(), 'image.png')

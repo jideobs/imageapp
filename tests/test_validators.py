@@ -13,14 +13,14 @@ class ImageValidatorTests(TestCase):
         self.assertEqual('Image file is null', self.validator.error)
 
     def test_validate__image_file__invalid_width(self):
-        test_image = create_test_image(3000, 3000)
+        test_image = create_test_image(4000, 4000)
         self.assertFalse(self.validator.validate(test_image))
         self.assertEqual(
             f'Make sure image width is between 1 and {ImageValidator.VALID_MAX_WIDTH}', self.validator.error
         )
 
     def test_validate__image_file__invalid_height(self):
-        test_image = create_test_image(1280, 3000)
+        test_image = create_test_image(1280, 4000)
         self.assertFalse(self.validator.validate(test_image))
         self.assertEqual(
             f'Make sure image height is between 1 and {ImageValidator.VALID_MAX_HEIGHT}', self.validator.error

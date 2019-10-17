@@ -1,5 +1,3 @@
-import io
-
 import boto3
 from botocore.exceptions import ClientError
 
@@ -33,6 +31,25 @@ def get_image(image_name):
     return image_bytes
 
 
+def cache_image_in_memory(name, image_binary):
+    """Cache image on memory for faster access"""
+    cache = LocalMemoryCache()
+    cache.add(name, image_binary)
+
+
+def upload_to_server(image_name, image_binary):
+    """Upload image to S3 server
+
+    :return: True if image was uploaded, else False
+    """
+    s3_client = boto3.client('s3', aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY)
+    try:
+        s3_client.upload_fileobj(image_binary, S3_BUCKET, image_name)
+    except ClientError:
+        return False
+    return True
+
+
 class Image:
     """Class that represents an ImageModel for handling a class"""
 
@@ -40,26 +57,9 @@ class Image:
     image_binary = None
 
     def __init__(self, image_binary, name):
-        """Initialize image file and name"""
+        """Initialize image binary and name"""
         self.image_binary = image_binary
         self.name = name
-
-    def cache_image_in_memory(self):
-        """Cache image on memory for faster access"""
-        cache = LocalMemoryCache()
-        cache.add(self.name, self.image_binary)
-
-    def upload_to_server(self, image):
-        """Upload image to S3 server
-
-        :return: True if image was uploaded, else False
-        """
-        s3_client = boto3.client('s3', aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY)
-        try:
-            s3_client.upload_fileobj(image, S3_BUCKET, self.name)
-        except ClientError:
-            return False
-        return True
 
     def save(self):
         """Save image_file to cache and upload to S3
@@ -68,13 +68,12 @@ class Image:
 
         return: Image uploaded filename
         """
-        image = io.BytesIO(self.image_binary)
         validator = ImageValidator()
-        if not validator.validate(image):
+        if not validator.validate(self.image_binary):
             raise ImageNotValidException(validator.error)
 
-        self.cache_image_in_memory()
+        cache_image_in_memory(self.name, self.image_binary)
 
-        is_successfully_uploaded = self.upload_to_server(image)
+        is_successfully_uploaded = upload_to_server(self.name, self.image_binary)
         if not is_successfully_uploaded:
             raise ImageUploadException('Unable to upload image.')

@@ -70,7 +70,7 @@ class UploadTests(TestCase):
 
     @responses.activate
     def test_upload__image_not_valid(self):
-        test_image = create_test_image(width=3000)
+        test_image = create_test_image(width=30000)
         responses.add(responses.GET, 'http://www.google.com/image.png', body=test_image.read(), status=200)
 
         response = self.client.post(
@@ -81,7 +81,7 @@ class UploadTests(TestCase):
         self.assertEqual(400, response.status_code)
 
         expected_response_data = {
-            'message': 'Image validation error: Make sure image width is between 1 and 1280',
+            'message': 'Image validation error: Make sure image width is between 1 and 3000',
             'data': {},
             'code': 400,
         }

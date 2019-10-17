@@ -48,9 +48,6 @@ coverage/
 .coveragerc
 .prettierrc
 
-# not include scripts because they come from external module
-scripts/
-
 # Celery files
 celerybeat-schedule
 celerybeat.pid

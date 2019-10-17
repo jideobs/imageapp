@@ -1,5 +1,4 @@
 import re
-import imghdr
 
 from utils import get_image_dimensions
 
