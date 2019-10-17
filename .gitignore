@@ -1,0 +1,61 @@
+# IDEs
+.project
+.pydevproject
+.idea
+.vscode
+.settings
+.DS_Store
+
+# Random files
+*~
+\#*
+tags
+
+venv/
+virtualenv/
+htmlcov/
+src/static_root/*
+bvn_images/*
+!bvn_images/.gitkeep
+
+.env
+
+# Python compiled byte code
+__pycache__/
+.pytest_cache/
+*.pyc
+
+# SQLite3 database
+*.sqlite
+
+# Docker volume data
+*.rdb
+*.pid
+celerybeat-schedule.*
+
+# Node modules
+node_modules/
+npm-debug.log
+
+# Coverage
+coverage/
+.coverage*
+.cache
+.coverage.ubuntu.*
+
+# static validation files
+.prospector.yml
+.coveragerc
+.prettierrc
+
+# not include scripts because they come from external module
+scripts/
+
+# Celery files
+celerybeat-schedule
+celerybeat.pid
+
+# kyc folder
+kyc/
+
+dev_run.sh
